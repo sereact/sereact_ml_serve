@@ -32,7 +32,10 @@ ARG BASE_IMAGE=ubuntu:rolling
 ARG PYTHON_VERSION
 ARG BUILD_NIGHTLY
 ENV PYTHONUNBUFFERED TRUE
+ENV DEBIAN_FRONTEND=noninteractive
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
+RUN echo $BASE_IMAGE
 RUN --mount=type=cache,id=apt-dev,target=/var/cache/apt \
     apt-get update && \
     apt-get upgrade -y && \
@@ -95,6 +98,8 @@ FROM ${BASE_IMAGE} AS production-image
 # Re-state ARG PYTHON_VERSION to make it active in this build-stage (uses default define at the top)
 ARG PYTHON_VERSION
 ENV PYTHONUNBUFFERED TRUE
+ENV DEBIAN_FRONTEND=noninteractive
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 RUN --mount=type=cache,target=/var/cache/apt \
     apt-get update && \

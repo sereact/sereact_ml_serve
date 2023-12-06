@@ -13,7 +13,7 @@ CUDA_VERSION=""
 USE_LOCAL_SERVE_FOLDER=false
 BUILD_WITH_IPEX=false
 BUILD_NIGHTLY=false
-PYTHON_VERSION=3.9
+PYTHON_VERSION=3.10
 
 for arg in "$@"
 do
@@ -96,7 +96,7 @@ do
           CUDA_VERSION="$2"
           if [ "${CUDA_VERSION}" == "cu121" ];
           then
-            BASE_IMAGE="nvidia/cuda:12.1.0-base-ubuntu20.04"
+            BASE_IMAGE="nvidia/cuda:12.1.0-cudnn8-devel-ubuntu20.04"
           elif [ "${CUDA_VERSION}" == "cu118" ];
           then
             BASE_IMAGE="nvidia/cuda:11.8.0-base-ubuntu20.04"
