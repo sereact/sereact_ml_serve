@@ -97,12 +97,14 @@ do
           if [ "${CUDA_VERSION}" == "cu121" ];
           then
             BASE_IMAGE="nvidia/cuda:12.1.0-cudnn8-devel-ubuntu20.04"
+            
           elif [ "${CUDA_VERSION}" == "cu118" ];
           then
             BASE_IMAGE="nvidia/cuda:11.8.0-base-ubuntu20.04"
           elif [ "${CUDA_VERSION}" == "cu117" ];
           then
-            BASE_IMAGE="nvidia/cuda:11.7.1-base-ubuntu20.04"
+            # BASE_IMAGE="pytorch/pytorch:2.0.1-cuda11.7-cudnn8-devel"
+            BASE_IMAGE="nvidia/cuda:11.7.1-cudnn8-devel-ubuntu20.04"
           elif [ "${CUDA_VERSION}" == "cu116" ];
           then
             BASE_IMAGE="nvidia/cuda:11.6.0-cudnn8-runtime-ubuntu20.04"
@@ -130,7 +132,8 @@ do
           ;;
     esac
 done
-
+# BASE_IMAGE="nvidia/cuda:11.6.2-cudnn8-runtime-ubuntu20.04"
+# BASE_IMAGE="europe-docker.pkg.dev/vertex-ai/training/pytorch-gpu.1-12.py310:latest"
 if [ "${MACHINE}" == "gpu" ] && $BUILD_WITH_IPEX ;
 then
   echo "--gpu and --ipex are mutually exclusive. Please select one of them."
@@ -153,6 +156,7 @@ then
   exit 1
 fi
 
+# echo ${DOCKER_BUILDKIT=1 docker build --file Dockerfile --build-arg BASE_IMAGE="${BASE_IMAGE}" --build-arg USE_CUDA_VERSION="${CUDA_VERSION}"  --build-arg PYTHON_VERSION="${PYTHON_VERSION}" --build-arg BUILD_NIGHTLY="${BUILD_NIGHTLY}" -t "${DOCKER_TAG}" --target production-image  .}
 if [ "${BUILD_TYPE}" == "production" ]
 then
   DOCKER_BUILDKIT=1 docker build --file Dockerfile --build-arg BASE_IMAGE="${BASE_IMAGE}" --build-arg USE_CUDA_VERSION="${CUDA_VERSION}"  --build-arg PYTHON_VERSION="${PYTHON_VERSION}" --build-arg BUILD_NIGHTLY="${BUILD_NIGHTLY}" -t "${DOCKER_TAG}" --target production-image  .

@@ -1,0 +1,9 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  script: |
+    DOCKER_BUILDKIT=1 docker build --file Dockerfile --build-arg BASE_IMAGE=nvidia/cuda:11.7.1-cudnn8-devel-ubuntu20.04 --build-arg USE_CUDA_VERSION=cu117 --build-arg PYTHON_VERSION=3.10 --build-arg BUILD_NIGHTLY=false -t us-central1-docker.pkg.dev/sereact/pickgpt-cr/sereact_ml_serve:0.0.4 --target production-image .
+  automapSubstitutions: true
+images:
+- 'us-central1-docker.pkg.dev/sereact/pickgpt-cr/sereact_ml_serve:0.0.4'
+options:
+  machineType: 'E2_HIGHCPU_32'

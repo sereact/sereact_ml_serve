@@ -66,24 +66,26 @@ RUN python -m pip install -U pip setuptools
 RUN export USE_CUDA=1
 
 ARG USE_CUDA_VERSION=""
-
 RUN git clone --depth 1 --recursive https://github.com/pytorch/serve.git
 
 WORKDIR "serve"
-
-RUN \
-    if echo "$BASE_IMAGE" | grep -q "cuda:"; then \
-        # Install CUDA version specific binary when CUDA version is specified as a build arg
-        if [ "USE_CUDA_VERSION" ]; then \
-            python ./ts_scripts/install_dependencies.py --cuda $USE_CUDA_VERSION; \
-        # Install the binary with the latest CPU image on a CUDA base image
-        else \
-            python ./ts_scripts/install_dependencies.py; \
-        fi; \
-    # Install the CPU binary
-    else \
-        python ./ts_scripts/install_dependencies.py; \
-    fi
+# COPY torch_cu117_linux.txt ./requirements/torch_cu117_linux.txt
+# COPY torch_linux.txt ./requirements/torch_linux.txt
+# COPY  install_dependencies.py ./ts_scripts/install_dependencies.py
+RUN python ./ts_scripts/install_dependencies.py --cuda $USE_CUDA_VERSION; 
+# RUN \
+#     if echo "$BASE_IMAGE" | grep -q "cuda:"; then \
+#         # Install CUDA version specific binary when CUDA version is specified as a build arg
+#         if [ "USE_CUDA_VERSION" ]; then \
+#             python ./ts_scripts/install_dependencies.py --cuda $USE_CUDA_VERSION; \
+#         # Install the binary with the latest CPU image on a CUDA base image
+#         else \
+#             python ./ts_scripts/install_dependencies.py; \
+#         fi; \
+#     # Install the CPU binary
+#     else \
+#         python ./ts_scripts/install_dependencies.py; \
+#     fi
 
 # Make sure latest version of torchserve is uploaded before running this
 RUN \
